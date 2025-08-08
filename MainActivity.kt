@@ -48,6 +48,7 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
         /* adicionar " implementation("com.google.mlkit:text-recognition:16.0.0") " no build.grandle(Module:) 
             adicionar uma imagem para tester na pasta "res/drawble" com o nome de "image_test.jpg"
+            */
         
         // Recupera os componentes da interface
         val textViewResult = findViewById<TextView>(R.id.textViewResult)
@@ -142,3 +143,4 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     }
 
 }
+

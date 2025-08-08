@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         imageView = findViewById(R.id.imageView)
         val button: Button = findViewById(R.id.button)
 
-        button.setOnClickListener {
+/*        button.setOnClickListener {
             val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
             if (intent.resolveActivity(packageManager) != null) {
                 startActivityForResult(intent, 100)
@@ -40,7 +40,15 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
                 Toast.makeText(this, "Câmera não disponível", Toast.LENGTH_SHORT).show()
             }
         }
+*/
 
+        button.setOnClickListener {
+            imageView.setImageResource(R.drawable.image_test) // nome do arquivo sem extensão
+        }
+
+        /* adicionar " implementation("com.google.mlkit:text-recognition:16.0.0") " no build.grandle(Module:) 
+            adicionar uma imagem para tester na pasta "res/drawble" com o nome de "image_test.jpg"
+        
         // Recupera os componentes da interface
         val textViewResult = findViewById<TextView>(R.id.textViewResult)
         val btnSelectImage = findViewById<Button>(R.id.button2)
@@ -97,6 +105,9 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
                         // Exibe o texto reconhecido
 
                         textViewResult.text = visionText.text
+                        textToSpeech.speak(visionText.text, TextToSpeech.QUEUE_FLUSH,null,null)
+
+
                     }
                     .addOnFailureListener { e ->
                         // Mostra mensagem de erro caso falhe

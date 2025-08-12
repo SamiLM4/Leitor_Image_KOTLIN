@@ -19,6 +19,7 @@ import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 import android.speech.tts.TextToSpeech
 import android.util.Log
 import java.util.Locale
+import com.google.firebase.database.FirebaseDatabase
 
 class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
@@ -31,6 +32,7 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
         imageView = findViewById(R.id.imageView)
         val button: Button = findViewById(R.id.button)
+        val buttonLayoutArquivados = findViewById<Button>(R.id.button3)
 
 /*        button.setOnClickListener {
             val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
@@ -42,14 +44,30 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         }
 */
 
-        button.setOnClickListener {
-            imageView.setImageResource(R.drawable.image_test) // nome do arquivo sem extensão
+        var idbanco = 0;
+
+        buttonLayoutArquivados.setOnClickListener{
+
+
+        val database = FirebaseDatabase.getInstance("https://projeto3bim-87ef8-default-rtdb.firebaseio.com/")
+        val myRef = database.getReference(idbanco.toString())
+            val textViewResult = findViewById<TextView>(R.id.textViewResult)
+            myRef.setValue(textViewResult.text.toString())
+
+            idbanco += 1
+            val intent = Intent(this, ArquivadosActivity::class.java)
+            startActivity(intent)
+//            setContentView(R.layout.arquivados_layout)
         }
 
-        /* adicionar " implementation("com.google.mlkit:text-recognition:16.0.0") " no build.grandle(Module:) 
+        button.setOnClickListener {
+            imageView.setImageResource(R.drawable.img) // nome do arquivo sem extensão
+        }
+
+        /* adicionar " implementation("com.google.mlkit:text-recognition:16.0.0") " no build.grandle(Module:)
             adicionar uma imagem para tester na pasta "res/drawble" com o nome de "image_test.jpg"
             */
-        
+
         // Recupera os componentes da interface
         val textViewResult = findViewById<TextView>(R.id.textViewResult)
         val btnSelectImage = findViewById<Button>(R.id.button2)
@@ -143,4 +161,3 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     }
 
 }
-

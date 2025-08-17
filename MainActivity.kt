@@ -1,5 +1,7 @@
 package com.example.aula01
 
+package com.example.projeto_3bim
+
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
@@ -34,27 +36,27 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         val button: Button = findViewById(R.id.button)
         val buttonLayoutArquivados = findViewById<Button>(R.id.button3)
 
-/*        button.setOnClickListener {
-            val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-            if (intent.resolveActivity(packageManager) != null) {
-                startActivityForResult(intent, 100)
-            } else {
-                Toast.makeText(this, "Câmera não disponível", Toast.LENGTH_SHORT).show()
-            }
-        }
-*/
+        /*        button.setOnClickListener {
+                    val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                    if (intent.resolveActivity(packageManager) != null) {
+                        startActivityForResult(intent, 100)
+                    } else {
+                        Toast.makeText(this, "Câmera não disponível", Toast.LENGTH_SHORT).show()
+                    }
+                }
+        */
 
-        var idbanco = 0;
+
 
         buttonLayoutArquivados.setOnClickListener{
 
 
-        val database = FirebaseDatabase.getInstance("https://projeto3bim-87ef8-default-rtdb.firebaseio.com/")
-        val myRef = database.getReference(idbanco.toString())
-            val textViewResult = findViewById<TextView>(R.id.textViewResult)
-            myRef.setValue(textViewResult.text.toString())
 
-            idbanco += 1
+            val database = FirebaseDatabase.getInstance("https://projeto3bim-87ef8-default-rtdb.firebaseio.com/")
+            val myRef = database.getReference("arquivados")
+            val textViewResult = findViewById<TextView>(R.id.textViewResult)
+            myRef.push().setValue(textViewResult.text.toString())
+
             val intent = Intent(this, ArquivadosActivity::class.java)
             startActivity(intent)
 //            setContentView(R.layout.arquivados_layout)
@@ -120,24 +122,25 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
             // Processa a imagem
             recognizer.process(image)
-                    .addOnSuccessListener { visionText ->
-                        // Exibe o texto reconhecido
+                .addOnSuccessListener { visionText ->
+                    // Exibe o texto reconhecido
 
-                        textViewResult.text = visionText.text
-                        textToSpeech.speak(visionText.text, TextToSpeech.QUEUE_FLUSH,null,null)
+                    textViewResult.text = visionText.text
+                    textToSpeech.speak(visionText.text, TextToSpeech.QUEUE_FLUSH,null,null)
 
 
-                    }
-                    .addOnFailureListener { e ->
-                        // Mostra mensagem de erro caso falhe
-                        textViewResult.text = "Erro: ${e.message}"
-                    }
+                }
+                .addOnFailureListener { e ->
+                    // Mostra mensagem de erro caso falhe
+                    textViewResult.text = "Erro: ${e.message}"
+                }
         } else {
             // Caso não haja imagem, mostra uma mensagem
             textViewResult.text = "Nenhuma imagem carregada no ImageView."
         }
     }
 
+    /*
     override fun onInit(status: Int) {
         if (status == TextToSpeech.SUCCESS) {
             val locale = Locale.getDefault()
@@ -149,6 +152,21 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             Log.e("TTS", "Initialization failed")
         }
     }
+    */
+
+    override fun onInit(status: Int) {
+        if (status == TextToSpeech.SUCCESS) {
+            val locale = Locale("pt", "BR") // Força Português-Brasil
+            val result = textToSpeech.setLanguage(locale)
+            if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                Log.e("TTS", "Idioma não suportado")
+                Toast.makeText(this, "Idioma PT-BR não suportado neste dispositivo", Toast.LENGTH_SHORT).show()
+            }
+        } else {
+            Log.e("TTS", "Falha ao inicializar TTS")
+        }
+    }
+
 
     private fun speakText(text: String) {
         textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, "")

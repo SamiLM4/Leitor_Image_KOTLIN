@@ -1,5 +1,3 @@
-package com.example.aula01
-
 package com.example.projeto_3bim
 
 import android.app.Activity
@@ -20,6 +18,8 @@ import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 
 import android.speech.tts.TextToSpeech
 import android.util.Log
+import android.view.View
+import android.widget.ProgressBar
 import java.util.Locale
 import com.google.firebase.database.FirebaseDatabase
 
@@ -27,6 +27,8 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
     private lateinit var imageView: ImageView
     private lateinit var textToSpeech: TextToSpeech
+    private lateinit var progressBar: ProgressBar
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,6 +37,8 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         imageView = findViewById(R.id.imageView)
         val button: Button = findViewById(R.id.button)
         val buttonLayoutArquivados = findViewById<Button>(R.id.button3)
+
+        progressBar = findViewById(R.id.progressBar)
 
         /*        button.setOnClickListener {
                     val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
@@ -106,6 +110,7 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
     // Função que lê a imagem do ImageView e faz o reconhecimento de texto
     private fun processImageFromImageView() {
+        progressBar.visibility = View.VISIBLE
         // Verifica se há uma imagem no ImageView
         val drawable = imageView.drawable
         val textViewResult = findViewById<TextView>(R.id.textViewResult)
@@ -134,9 +139,11 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
                     // Mostra mensagem de erro caso falhe
                     textViewResult.text = "Erro: ${e.message}"
                 }
+            progressBar.visibility = View.GONE
         } else {
             // Caso não haja imagem, mostra uma mensagem
             textViewResult.text = "Nenhuma imagem carregada no ImageView."
+            progressBar.visibility = View.GONE
         }
     }
 
